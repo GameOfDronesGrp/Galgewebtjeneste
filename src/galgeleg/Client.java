@@ -9,8 +9,9 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
 
+//ggg''
 
-public class Client {
+public class Client  {
     
     //main run
     public static void main(String[] args) throws MalformedURLException, RemoteException{
@@ -32,7 +33,7 @@ public class Client {
         while(true){
             if(loggedIn == false){
                 
-                System.out.println("1. Log ind");
+                System.out.println("1. Log ind nu");
                 System.out.println("2. Afslut");
                 
                 choice = scan.nextInt();
