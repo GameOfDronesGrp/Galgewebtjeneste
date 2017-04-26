@@ -6,11 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/** @author Ronnie Dalsgaard */
 public class Connector {
-    private final String HOST     = "gruppe11sql.cxyxxbzjqour.us-west-2.rds.amazonaws.com";
+    private final String HOST     = "galgeproject.cxyxxbzjqour.us-west-2.rds.amazonaws.com";
     private final int    PORT     = 3306;
-    private final String DATABASE = "GalgeLegDB";
+    private final String DATABASE = "Galgeproject";
     private final String USERNAME = "gruppe11"; 
     private final String PASSWORD = "gruppe11";
 		
