@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 /** @author Ronnie Dalsgaard */
 public class Connector {
-	private final String HOST     = "gruppe11sql.cxyxxbzjqour.us-west-2.rds.amazonaws.com";
+    private final String HOST     = "gruppe11sql.cxyxxbzjqour.us-west-2.rds.amazonaws.com";
     private final int    PORT     = 3306;
     private final String DATABASE = "GalgeLegDB";
     private final String USERNAME = "gruppe11"; 
@@ -21,7 +21,7 @@ public class Connector {
 //    private final String PASSWORD = "";
     private static Connection connection;
     
-    public Connector() throws ClassNotFoundException {
+    public Connector() throws DALException, ClassNotFoundException {
         try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE;

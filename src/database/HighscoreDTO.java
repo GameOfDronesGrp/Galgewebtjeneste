@@ -12,56 +12,57 @@ import java.io.Serializable;
  */
 public class HighscoreDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-        private int userID;
-	private String username;
-        private String score;
-	private String datetime;
+        private String userID;
+        private int score;
+	private String time;
+        private int rank;
 	
 	
-	public HighscoreDTO() {
-		this.userID = 0;
-		this.username = null;
-		this.score = null;
-		this.datetime = null;
-		
+	public HighscoreDTO(String user_id) {
+            this.userID = user_id;
+            this.score = 0;
+            this.time = "NOW()";
 	}
 
-	public HighscoreDTO(int userID, String username, String score, String datetime) {
-		this.userID = userID;
-		this.username = username;
-		this.score = score;
-		this.datetime = datetime;
+	public HighscoreDTO(String userID, int score, String time) {
+            this.userID = userID;
+            this.score = score;
+            this.time = time;
 		
 	}
-	
-	public HighscoreDTO(HighscoreDTO hs)
-    {
-    	this.userID = hs.getUserID();
-    	this.username = hs.getUserName();
-    	this.score = hs.getHighscore();
-    	this.datetime = hs.getDatetime();
+	public HighscoreDTO(int rank, String userID, int score, String time) {
+            this.rank = rank;
+            this.userID = userID;
+            this.score = score;
+            this.time = time;
+		
+	}
+	public HighscoreDTO(HighscoreDTO hs){
+            this.userID = hs.getUserID();
+            this.score = hs.getScore();
+            this.time = hs.getDatetime();
     	
-    }
+        }
 	
-	public HighscoreDTO(Object hs)
-    {
-    	this.userID = ((HighscoreDTO) hs).getUserID();
-    	this.username = ((HighscoreDTO) hs).getUserName();
-    	this.score = ((HighscoreDTO) hs).getHighscore();
-    	this.datetime = ((HighscoreDTO) hs).getDatetime();
-    	
-    }
+	public HighscoreDTO(Object hs){
+            this.userID = ((HighscoreDTO) hs).getUserID();
+            this.score = ((HighscoreDTO) hs).getScore();
+            this.time = ((HighscoreDTO) hs).getDatetime();
+    	}
 
-	
-	public int getUserID() { return userID; }
+	public int getUserRank(String userID){
+            if(rank > 0){
+                return 1;
+            }else{
+                return -1;
+            }
+        }
+        public String getUserID() { return userID; }
 	public void setUserID(int id) { this.userID = userID; }
-	public String getUserName() { return username; }
-	public void setUserName(String username) { this.username = username; }
-	public String getHighscore() { return score; }
-	public void setHighscore(String score) { this.score = score; }
-	public String getDatetime() { return datetime; }
-	public void setDatetime(String datetime) { this.datetime = datetime; }
-	
-	public String toString() { return userID + "\t" + username + "\t" + score + "\t" + datetime; }
+	public int getScore() { return score; }
+	public void setScore(int score) { this.score = score; }
+	public String getDatetime() { return time; }
+	public void setDatetime(String datetime) { this.time = datetime; }
+	public String toString() { return userID + "\t" + score + "\t" + time; }
 }
 

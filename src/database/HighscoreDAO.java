@@ -16,102 +16,83 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.applet.Main;
 
 
-public abstract class HighscoreDAO implements HighscoreI {
-    
-    
-
-    @Override
-    public boolean hentBruger(String brugernavn, String password) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-
-    public HighscoreDTO getHighscore(int userID) throws DALException, ClassNotFoundException {
-		Connector connector = new Connector();
-
-		try {
-			ResultSet rs = connector.doQuery("SELECT * FROM user, Highscore WHERE user_id = " + userID);
-			
-                        return new HighscoreDTO(rs.getInt("user_id"), rs.getString("username"), rs.getString("score"), rs.getString("datetime"));
-		}
-		catch (SQLException e) {throw new DALException(e); }
-
-	}
+public class HighscoreDAO {
         
-        @Override
-	public void createHighscore(HighscoreDTO hs) throws DALException {		
-		try {		
-                    Connector connector;
-                    
-                    connector = new Connector();
-                    Object ex = null;
-                    
-                    
-                    
-                    try {
-                        
-                      
-                        connector.doUpdate(
-                                "INSERT INTO user(user_id, username) VALUES " +
-                                        "(" + hs.getUserID()+ ", '" + hs.getUserName() + "')"
-                        );
-                        connector.doUpdate(
-                                "INSERT INTO Highscore(score, datetime) VALUES " +
-                                        "('" + hs.getHighscore()+ "', '" + hs.getDatetime() + "')"
-                        );
+        public HighscoreDAO(){
+        }
+        
+        //@Override
+        //public boolean hentBruger(String brugernavn, String password) throws RemoteException {
+        //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //}
+    
+
+        public HighscoreDTO getHighscore(String userID) throws DALException, ClassNotFoundException {
+            Connector connector = new Connector();
+            try {
+                ResultSet rs = connector.doQuery("SELECT * FROM Highscore WHERE user_id = " + userID+"';");
+                if(rs.next())
+                    return new HighscoreDTO(rs.getString("user_id"), rs.getInt("score"), rs.getString("time"));
+                else System.out.println("Ingen værdier fundet...");
+            } catch (SQLException ex) {
+                System.out.println("Kunne ikke hente highscore");
+                Logger.getLogger(HighscoreDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           return null;
+        }
+        
+        public int getScore(String userID) throws DALException, ClassNotFoundException{
+            Connector connector = new Connector();
+            try {
+                ResultSet rs = connector.doQuery("SELECT score FROM Highscore WHERE user_id = \""+ userID+"\";");
+                int score = 0;
+                if(rs.next()) score = rs.getInt("score");
+                else System.out.println("Ingen værdier fundet...");
+                return score;
+            } catch (SQLException ex) {
+                Logger.getLogger(HighscoreDAO.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Kunne ikke hente score");
+            }
+          return -1;  
+        }
+        
+        
+        //@Override
+	public void createHighscore(HighscoreDTO hs) throws DALException, ClassNotFoundException {
+            Connector connector = new Connector();
+            try {
+                connector.doUpdate(
+                        "INSERT INTO user(user_id, score) VALUES " +
+                        "('" + hs.getUserID()+ "', " + hs.getScore() + ");");
                     } catch (SQLException exception) {
                         Logger.getLogger(HighscoreDAO.class.getName()).log(Level.SEVERE, null, exception);
-                    }
-                } catch (ClassNotFoundException ex) {
-
-			
-		}
+            }
 	}
-        @Override
-	public void updateHighscore(HighscoreDTO hs) throws DALException {
-		try {
-                    Connector connector = new Connector();
-                    try {
-                        connector.doUpdate(
-                                "UPDATE Highscore SET  score = " + hs.getHighscore() + ", datetime =  '" + hs.getDatetime() +
-                                        "'" 
-                        );
-                    } catch (SQLException e) {
-                        
-                        throw new DALException(e);
-                    }
-                } catch (ClassNotFoundException ex) {
-
-			
-		}
+        //@Override
+	public void updateHighscore(HighscoreDTO hs) throws DALException, ClassNotFoundException {
+            Connector connector = new Connector();
+            try {
+                connector.doUpdate( "UPDATE Highscore SET  score = " + hs.getScore() + 
+                        ", time =  NOW() WHERE user_id = '"+hs.getUserID()+"';");
+            } catch (SQLException e) {
+                throw new DALException(e);
+            }
 	}
 
-	
-
-	public List<HighscoreDTO> getHighscoreList() throws DALException {
-
-		try {
-                    
-                    List<HighscoreDTO> list = new ArrayList<HighscoreDTO>();
-                    
-                    Connector connector = new Connector();
-                    try {
-                        ResultSet rs = connector.doQuery("SELECT * FROM user natural join Highscore");
-                        
-                        while (rs.next())
-                        {
-                            list.add(new HighscoreDTO(rs.getInt("user_id"), rs.getString("username"), rs.getString("score"), rs.getString("datetime")));
-                        }
-                    }
-                    catch (SQLException e) { throw new DALException(e); }
-                    return list;
+	public List<HighscoreDTO> getHighscoreList() throws DALException, ClassNotFoundException {
+            Connector connector = new Connector();
+            List<HighscoreDTO> list = new ArrayList<HighscoreDTO>();
+            try {
+                ResultSet rs = connector.doQuery("SELECT  @curRank := @curRank + 1  AS rank, user_id,"+
+                        " score, time  FROM ( SELECT @curRank := 0) r,  Highscore h  ORDER BY  score DESC;");
+                while (rs.next()){
+                    list.add(new HighscoreDTO(rs.getInt("rank"), rs.getString("user_id"), rs.getInt("score"), rs.getString("time")));
                 }
-		catch (ClassNotFoundException ex) {
-}
-        return getHighscoreList();
-	}
-
+            }catch (SQLException e){
+                throw new DALException(e);
+            }
+            return list;
+        }
 }
