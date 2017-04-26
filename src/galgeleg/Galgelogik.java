@@ -4,6 +4,7 @@ import brugerautorisation.transport.soap.Brugeradmin;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -18,7 +19,7 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.Service;
 
 @WebService(endpointInterface = "galgeleg.GalgelegI")
-public class Galgelogik implements GalgelegI {
+public class Galgelogik implements GalgelegI, Serializable{
   private ArrayList<String> muligeOrd = new ArrayList<String>();
   private String ordet;
   private ArrayList<String> brugteBogstaver = new ArrayList<String>();

@@ -9,12 +9,14 @@ package galgeleg;
 import javax.xml.ws.Endpoint;
 
 
-public class Server {
-		public static void main(String[] args) {
-		System.out.println("publicerer Galgelegtjeneste");
-		GalgelegI g = new Galgelogik();
-    // Ipv6-addressen [::] svarer til Ipv4-adressen 0.0.0.0, der matcher alle maskinens netkort og 
-		Endpoint.publish("http://[::]:9591/galgelegtjeneste", g);
-		System.out.println("Galgelegtjeneste publiceret.");
+public class Server{
+    
+	public static void main(String[] args) throws Exception{
+            System.out.println("publicerer Galgelegtjeneste");
+            GalgelegI g = new Galgelogik();
+            // Ipv6-addressen [::] svarer til Ipv4-adressen 0.0.0.0, der matcher alle maskinens netkort og 
+            Endpoint.publish("http://[::]:9591/galgelegtjeneste", g);
+            System.out.println("Galgelegtjeneste publiceret.");
 	}
+    
 }

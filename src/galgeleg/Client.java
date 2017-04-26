@@ -11,14 +11,14 @@ import javax.xml.ws.Service;
 public class Client {
     
     //main run
-    public static void main(String[] args) throws MalformedURLException, RemoteException{
+    public static void main(String[] args) throws MalformedURLException, RemoteException, Exception{
         Scanner scan = new Scanner(System.in);
-        URL jakobs = new URL("http://130.226.195.227:9591/galgelegtjeneste?wsdl");   // Jacobs server
-        //URL mohammads = new URL("http://80.197.119.219:9591/galgelegtjeneste?wsdl"); // Mohammads server
+        //URL jakobs = new URL("http://130.226.195.227:9591/galgelegtjeneste?wsdl");   // Jacobs server
+        URL local = new URL("http://localhost:9591/galgelegtjeneste?wsdl"); 
         QName qname = new QName("http://galgeleg/", "GalgelogikService");
-        Service service = Service.create(jakobs, qname);
+        Service service = Service.create(local, qname);
         GalgelegI game = service.getPort(GalgelegI.class);
-        run(game, scan);        
+        run(game, scan);
         scan.close();
     }
     
